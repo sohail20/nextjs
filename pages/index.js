@@ -1,115 +1,92 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import { useQuerySubscription } from "react-datocms";
+import CustomCard from "../component/cards/CustomCard";
+import SimpleCard from "../component/cards/SimpleCard";
+
+// import { useState } from "react"
+// import BottomAppBar from '../component/BottomNavbar';
+// import HomePage from './HomePage';
+// import SearchPage from "./SearchPage";
 
 export default function Home() {
+  const { status, error, data } = useQuerySubscription({
+    query: `
+      query {
+        allProducts {
+          id
+          name
+          price
+          _status
+          _firstPublishedAt
+          image {
+            url
+            title
+            alt
+          }
+        }
+        _allProductsMeta {
+          count
+        }
+      }`,
+    variables: { first: 10 },
+    token: "f2a4acd4d4892a7759d70199fc1413",
+  });
+  const statusMessage = {
+    connecting: "Connecting to DatoCMS...",
+    connected: "Connected to DatoCMS, receiving live updates!",
+    closed: "Connection closed",
+  };
+  // const [search, setSearch] = useState("")
+  // const [currentPage, setCurrentPage] = useState("homePage")
+
+  // const renderPage = {
+  //   homePage: <HomePage search={search} />,
+  //   searchPage: <SearchPage
+  //     handleClose={() => {
+  //       setCurrentPage("homePage")
+  //     }}
+  //   />
+  // }
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <div >
+        <p>Connection status: {statusMessage[status]}</p>
+        {error && (
+          <div>
+            <h1>Error: {error.code}</h1>
+            <div>{error.message}</div>
+            {error.response && (
+              <pre>{JSON.stringify(error.response, null, 2)}</pre>
+            )}
+          </div>
+        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: 20
+          }}
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  )
+          {data && (
+            <>
+              {data.allProducts.map((product, i) => (
+                <SimpleCard product={product} key={i} />
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+      {/* <BottomAppBar
+        handleSearch={(e) => {
+          setSearch(e)
+        }}
+        hideInput={currentPage === "searchPage"}
+        handleAddMoreChat={() => {
+          setCurrentPage("searchPage")
+        }}
+      >
+        {renderPage[currentPage]}
+      </BottomAppBar> */}
+    </>
+  );
 }

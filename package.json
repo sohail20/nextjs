@@ -6,8 +6,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/material": "^5.11.12",
+    "@sentry/browser": "^7.45.0",
+    "@sentry/nextjs": "^7.44.2",
     "next": "latest",
     "react": "18.2.0",
+    "react-datocms": "^4.0.13",
     "react-dom": "18.2.0"
   }
 }
