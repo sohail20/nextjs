@@ -15,6 +15,9 @@ export default function Home() {
           id
           name
           price
+          content{
+            htmlCode
+          }
           _status
           _firstPublishedAt
           image {
