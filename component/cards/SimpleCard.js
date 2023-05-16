@@ -20,8 +20,17 @@ export default function SimpleCard({ product }) {
     }
 
     // const htmlDocument = parser.parseFromString(htmlString, 'text/html');
-    const tempElement = document.createElement('div');
-    tempElement.innerHTML = htmlString;
+    // const tempElement = document.createElement('div');
+    const tempElement = `
+    <p>
+  <script src="https://akdn.shorthandstories.com/mountain-meltdown/embed.js"></script>
+  <script>
+    document.getElementById("custom").classList.remove('w-11/12');
+    document.getElementById("custom").classList.add('w-12/12');
+  </script>
+	<div data-shorthand="https://akdn.shorthandstories.com/mountain-meltdown"></div>
+</p>
+    `
     // console.log("tempElement", tempElement)
     return (
         <Card sx={{ maxWidth: 345 }}>
@@ -44,7 +53,7 @@ export default function SimpleCard({ product }) {
                 <Typography variant="h6" color="text.secondary">
                     Rs.{price}
                 </Typography>
-               <div dangerouslySetInnerHTML={{ __html: htmlString }}/>
+                <div dangerouslySetInnerHTML={{ __html: htmlString }} />
             </CardContent>
         </Card>
     );

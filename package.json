@@ -12,6 +12,7 @@
     "@mui/material": "^5.11.12",
     "@sentry/browser": "^7.45.0",
     "@sentry/nextjs": "^7.44.2",
+    "dangerously-set-html-content": "^1.0.13",
     "next": "latest",
     "react": "18.2.0",
     "react-datocms": "^4.0.13",
